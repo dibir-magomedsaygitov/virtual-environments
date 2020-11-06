@@ -169,8 +169,7 @@
     ],
     "dotnet": {
         "aptPackages": [
-            "dotnet-sdk-3.1",
-            "dotnet-sdk-5.0"
+            "dotnet-sdk-3.1"
         ],
         "versions": [
             "2.1",
