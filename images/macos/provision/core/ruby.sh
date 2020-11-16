@@ -18,7 +18,7 @@ if [ ! -d $RUBY_PATH ]; then
 fi
 
 for TOOLSET_VERSION in ${TOOLSET_VERSIONS[@]}; do
-    PACKAGE_TAR_NAME=$(curl $RELEASE_URL | get_toolset_value '.assets[].name' | grep "^ruby-${TOOLSET_VERSION}-${TOOLSET_PLATFORM}.tar.gz$" | sort -V | tail -1)
+    PACKAGE_TAR_NAME=$(curl $RELEASE_URL | jq -r '.assets[].name' | grep "^ruby-${TOOLSET_VERSION}-${TOOLSET_PLATFORM}.tar.gz$" | sort -V | tail -1)
     RUBY_VERSION=$(echo $PACKAGE_TAR_NAME | cut -d'-' -f 2)
     PACKAGE_TAR_TEMP_PATH="/tmp/$PACKAGE_TAR_NAME"
     RUBY_VERSION_PATH="$RUBY_PATH/$RUBY_VERSION"
