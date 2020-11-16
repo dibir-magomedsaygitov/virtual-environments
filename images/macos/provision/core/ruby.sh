@@ -32,8 +32,8 @@ for TOOLSET_VERSION in ${TOOLSET_VERSIONS[@]}; do
     tar xf $PACKAGE_TAR_TEMP_PATH -C $RUBY_VERSION_PATH
 
     COMPLETE_FILE_PATH="$RUBY_VERSION_PATH/x64.complete"
-    if [ ! -f $COMPLETE_FILE_PATH ]; then
-        echo "Create complete file"    
+    if [ ! -f $COMPLETE_FILE_PATH ]; then
+        echo "Create complete file"
         touch $COMPLETE_FILE_PATH
     fi
 done
