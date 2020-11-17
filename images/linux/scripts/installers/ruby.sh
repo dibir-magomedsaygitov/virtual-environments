@@ -15,8 +15,8 @@ apt-get install -y libz-dev openssl libssl-dev
 echo "Install Ruby..."
 toolset="$INSTALLER_SCRIPT_FOLDER/toolset.json"
 PACKAGE_TAR_NAMES=$(curl -s "https://api.github.com/repos/ruby/ruby-builder/releases/latest" | jq -r '.assets[].name')
-TOOLSET_VERSIONS=$(jq -r '.toolcache[] | select(.name | contains("ruby")) | .versions[]' $toolset)
-PLATFORM_VERSION=$(jq -r '.toolcache[] | select(.name | contains("ruby")) | .platform_version' $toolset)
+TOOLSET_VERSIONS=$(jq -r '.toolcache[] | select(.name | contains("Ruby")) | .versions[]' $toolset)
+PLATFORM_VERSION=$(jq -r '.toolcache[] | select(.name | contains("Ruby")) | .platform_version' $toolset)
 RUBY_PATH="$AGENT_TOOLSDIRECTORY/Ruby"
 
 echo "Check if Ruby hostedtoolcache folder exist..."

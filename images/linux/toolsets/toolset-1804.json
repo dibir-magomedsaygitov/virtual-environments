@@ -59,7 +59,7 @@
             ]
         },
         {
-            "name": "ruby",
+            "name": "Ruby",
             "platform_version": "18.04",
             "arch": "x64",
             "versions": [
