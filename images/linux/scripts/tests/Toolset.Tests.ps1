@@ -23,11 +23,10 @@ Describe "Toolset" {
             command = "--version"
         }
     }
-    
+
     foreach($tool in $tools) {
         $toolName = $tool.Name
         Context "$toolName" {
-            $toolPath = Join-Path $env:AGENT_TOOLSDIRECTORY $toolName
             # Get executables for current tool
             $toolExecs = $toolsExecutables[$toolName]
 
@@ -36,8 +35,8 @@ Describe "Toolset" {
                 if ($version.Split(".").Length -lt 3) {
                     $version += ".*"
                 }
-
-                $expectedVersionPath = Join-Path $toolPath $version
+                
+                $expectedVersionPath = Join-Path $env:AGENT_TOOLSDIRECTORY $toolName $toolPath $version
                 $testCases = @{ $ExpectedVersionPath = $expectedVersionPath; ExpectedVersion = $version }
 
                 It "<ExpectedVersion> version folder exists" -TestCases $testCases {
