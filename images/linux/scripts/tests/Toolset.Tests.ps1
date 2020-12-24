@@ -37,14 +37,8 @@ Describe "Toolset" {
                 }
 
                 $expectedVersionPath = Join-Path $env:AGENT_TOOLSDIRECTORY $toolName $version
-                $testCases = @{ ExpectedVersionPath = $expectedVersionPath; ExpectedVersion = $version }
 
-                It "<ExpectedVersion> version folder exists" -TestCases $testCases {
-                    param (
-                        [string] $ExpectedVersionPath
-                    )
-                    
-                    Write-Host $ExpectedVersionPath
+                It "<version> version folder exists" -TestCases @{ ExpectedVersionPath = $expectedVersionPath} {
                     $ExpectedVersionPath | Should -Exist        
                 }
 
@@ -56,15 +50,9 @@ Describe "Toolset" {
 
                 if($toolExecs) {
                     foreach ($executable in $toolExecs["tools"]) {
-                        $executablePath = Join-Path $foundVersionPath $executable
-                        $testCases = @{ Executable = $executable; ExecutablePath = $executablePath}    
+                        $executablePath = Join-Path $foundVersionPath $executable   
     
-                        It "Validate <Executable>" -TestCases $testCases {
-                            param (
-                                [string] $ExecutablePath
-                            )
-                            
-                            Write-Host $ExecutablePath
+                        It "Validate <executable>" -TestCases $testCases @{ExecutablePath = $executablePath} {
                             $ExecutablePath | Should -Exist        
                         }
                     }
