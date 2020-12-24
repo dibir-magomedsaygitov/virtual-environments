@@ -52,7 +52,7 @@ Describe "Toolset" {
                     foreach ($executable in $toolExecs["tools"]) {
                         $executablePath = Join-Path $foundVersionPath $executable   
     
-                        It "Validate <executable>" -TestCases $testCases @{ExecutablePath = $executablePath} {
+                        It "Validate <executable>" -TestCases @{ExecutablePath = $executablePath} {
                             $ExecutablePath | Should -Exist        
                         }
                     }
