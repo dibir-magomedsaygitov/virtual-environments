@@ -35,8 +35,9 @@ Describe "Toolset" {
                 if ($version.Split(".").Length -lt 3) {
                     $version += ".*"
                 }
-                
-                $expectedVersionPath = Join-Path $env:AGENT_TOOLSDIRECTORY $toolName $toolPath $version
+
+                $expectedVersionPath = Join-Path $env:AGENT_TOOLSDIRECTORY $toolName $version
+                Write-Host $expectedVersionPath
                 $testCases = @{ $ExpectedVersionPath = $expectedVersionPath; ExpectedVersion = $version }
 
                 It "<ExpectedVersion> version folder exists" -TestCases $testCases {
@@ -48,6 +49,7 @@ Describe "Toolset" {
                 }
 
                 $toolExecs = $toolsExecutables[$toolName]
+                Write-Host $toolExecs
                 $foundVersion = Get-Item $expectedVersionPath `
                     | Sort-Object -Property {[version]$_.name} -Descending `
                     | Select-Object -First 1
@@ -56,6 +58,7 @@ Describe "Toolset" {
                 if($toolExecs) {
                     foreach ($executable in $toolExecs["tools"]) {
                         $executablePath = Join-Path $foundVersionPath $executable
+                        Write-Host $executablePath
                         $testCases = @{ $Executable = $executable; $ExecutablePath = $executablePath}    
     
                         It "Validate <Executable>" -TestCases $testCases {

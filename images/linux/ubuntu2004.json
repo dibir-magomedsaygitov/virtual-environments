@@ -187,8 +187,6 @@
                 "{{template_dir}}/scripts/installers/nvm.sh",
                 "{{template_dir}}/scripts/installers/nodejs.sh",
                 "{{template_dir}}/scripts/installers/ruby.sh",
-                "{{template_dir}}/scripts/installers/r.sh",
-                "{{template_dir}}/scripts/installers/rust.sh",
                 "{{template_dir}}/scripts/installers/packer.sh",
                 "{{template_dir}}/scripts/installers/dpkg-config.sh",
                 "{{template_dir}}/scripts/installers/rndgenerator.sh",
