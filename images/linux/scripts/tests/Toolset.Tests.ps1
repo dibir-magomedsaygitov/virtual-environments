@@ -1,6 +1,6 @@
-$tools = (Get-ToolsetContent).toolcache
-
 Describe "Toolset" {
+    $tools = (Get-ToolsetContent).toolcache
+
     $toolsExecutables = @{
         Python = @{
             tools = @("python", "bin/pip")
@@ -37,19 +37,18 @@ Describe "Toolset" {
                 }
 
                 $expectedVersionPath = Join-Path $env:AGENT_TOOLSDIRECTORY $toolName $version
-                Write-Host $expectedVersionPath
-                $testCases = @{ $ExpectedVersionPath = $expectedVersionPath; ExpectedVersion = $version }
+                $testCases = @{ ExpectedVersionPath = $expectedVersionPath; ExpectedVersion = $version }
 
                 It "<ExpectedVersion> version folder exists" -TestCases $testCases {
                     param (
                         [string] $ExpectedVersionPath
                     )
                     
+                    Write-Host $ExpectedVersionPath
                     $ExpectedVersionPath | Should -Exist        
                 }
 
                 $toolExecs = $toolsExecutables[$toolName]
-                Write-Host $toolExecs
                 $foundVersion = Get-Item $expectedVersionPath `
                     | Sort-Object -Property {[version]$_.name} -Descending `
                     | Select-Object -First 1
@@ -58,14 +57,14 @@ Describe "Toolset" {
                 if($toolExecs) {
                     foreach ($executable in $toolExecs["tools"]) {
                         $executablePath = Join-Path $foundVersionPath $executable
-                        Write-Host $executablePath
-                        $testCases = @{ $Executable = $executable; $ExecutablePath = $executablePath}    
+                        $testCases = @{ Executable = $executable; ExecutablePath = $executablePath}    
     
                         It "Validate <Executable>" -TestCases $testCases {
                             param (
                                 [string] $ExecutablePath
                             )
                             
+                            Write-Host $ExecutablePath
                             $ExecutablePath | Should -Exist        
                         }
                     }
