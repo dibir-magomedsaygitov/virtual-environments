@@ -27,7 +27,6 @@ Describe "Toolset" {
     foreach($tool in $tools) {
         $toolName = $tool.Name
         Context "$toolName" {
-            # Get executables for current tool
             $toolExecs = $toolsExecutables[$toolName]
 
             foreach ($version in $tool.versions) {
@@ -38,7 +37,7 @@ Describe "Toolset" {
 
                 $expectedVersionPath = Join-Path $env:AGENT_TOOLSDIRECTORY $toolName $version
 
-                It "<version> version folder exists" -TestCases @{ ExpectedVersionPath = $expectedVersionPath} {
+                It "$version version folder exists" -TestCases @{ ExpectedVersionPath = $expectedVersionPath} {
                     $ExpectedVersionPath | Should -Exist        
                 }
 
@@ -52,7 +51,7 @@ Describe "Toolset" {
                     foreach ($executable in $toolExecs["tools"]) {
                         $executablePath = Join-Path $foundVersionPath $executable   
     
-                        It "Validate <executable>" -TestCases @{ExecutablePath = $executablePath} {
+                        It "Validate $executable" -TestCases @{ExecutablePath = $executablePath} {
                             $ExecutablePath | Should -Exist        
                         }
                     }
