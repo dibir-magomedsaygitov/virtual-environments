@@ -3,7 +3,7 @@
 source ~/utils/utils.sh
 
 echo Updating RubyGems...
-gem update --system
+gem update --system 3.2.0
 
 echo Installing xcode-install utility...
 gem install xcode-install --force
