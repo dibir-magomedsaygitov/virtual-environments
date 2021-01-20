@@ -188,6 +188,7 @@
                 "TOOLSET_JSON_PATH={{user `toolset_json_path`}}"
             ],
             "scripts": [
+                "{{ template_dir }}/scripts/Installers/Install-Git.ps1",
                 "{{ template_dir }}/scripts/Installers/Install-Nuget.ps1",
                 "{{ template_dir }}/scripts/Installers/Install-Wix.ps1",
                 "{{ template_dir }}/scripts/Installers/Install-WDK.ps1",
@@ -243,7 +244,6 @@
             "scripts": [
                 "{{ template_dir }}/scripts/Installers/Install-OpenSSL.ps1",
                 "{{ template_dir }}/scripts/Installers/Install-Perl.ps1",
-                "{{ template_dir }}/scripts/Installers/Install-Git.ps1",
                 "{{ template_dir }}/scripts/Installers/Install-GitHub-CLI.ps1",
                 "{{ template_dir }}/scripts/Installers/Install-PHP.ps1",
                 "{{ template_dir }}/scripts/Installers/Install-Rust.ps1",
