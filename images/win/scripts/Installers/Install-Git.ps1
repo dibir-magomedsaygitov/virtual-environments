@@ -3,7 +3,7 @@
 ##  Desc:  Install Git for Windows
 ################################################################################
 
-Choco-Install -PackageName git -ArgumentList "--installargs", "/VERYSILENT", "/NORESTART", "/NOCANCEL", "/SP-", "/CLOSEAPPLICATIONS", "/RESTARTAPPLICATIONS", "/o:PathOption=CmdTools", "/o:BashTerminalOption=ConHost", "/o:EnableSymlinks=Enabled", "/COMPONENTS=gitlfs"
+Choco-Install -PackageName git -ArgumentList '--installargs="/VERYSILENT /NORESTART /NOCANCEL /SP- /CLOSEAPPLICATIONS /RESTARTAPPLICATIONS /o:PathOption=CmdTools /o:BashTerminalOption=ConHost /o:EnableSymlinks=Enabled /COMPONENTS=gitlfs"'
 
 # Install hub with --ignore-dependencies option to prevent the installation of the git package. See details in https://github.com/actions/virtual-environments/issues/2375
 Choco-Install -PackageName hub -ArgumentList "--ignore-dependencies"
