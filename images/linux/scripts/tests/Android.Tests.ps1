@@ -22,13 +22,13 @@ Describe "Android" {
         "ndk/$ndkLTSFullVersion"
     )
 
-    [string]$ndkLatestVersion = Get-ToolsetValue "android.ndk.latest"
-    if ($ndkLatestVersion) {        
+    if (Test-IsUbuntu20) {
+        [string]$ndkLatestVersion = Get-ToolsetValue "android.ndk.latest"
         $ndkLatestFullVersion = (Get-ChildItem "$env:ANDROID_HOME/ndk/$ndkLatestVersion.*" | Select-Object -Last 1).Name
         $androidPackages += @("ndk/$ndkLatestFullVersion")
     }
     
-    $androidPackages = $androidPackages | ForEach-Object { $_ }
+    $androidPackages | ForEach-Object { $_ }
 
     BeforeAll {
         $ANDROID_SDK_DIR = "/usr/local/lib/android/sdk"
