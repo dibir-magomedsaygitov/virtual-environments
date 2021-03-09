@@ -22,8 +22,8 @@ installJavaFromAdoptOpenJDK() {
     download_with_retries $archivePath "/tmp" "OpenJDK$JAVA_VERSION.tar.gz"
 
     mkdir "/tmp/jdk-$fullVersion" && tar -xzf "/tmp/OpenJDK$JAVA_VERSION.tar.gz" -C "/tmp/jdk-$fullVersion"
-    mkdir -p $javaToolcacheVersionArchPath
-    mv /tmp/jdk-$fullVersion/*/* $javaToolcacheVersionArchPath
+    mkdir -p "$javaToolcacheVersionArchPath"
+    mv "/tmp/jdk-$fullVersion/*/*" "$javaToolcacheVersionArchPath"
 
     local JAVA_HOME_PATH="$javaToolcacheVersionArchPath/Contents/Home"
 
@@ -35,7 +35,7 @@ installJavaFromAdoptOpenJDK() {
     fi
 }
 
-JAVA_VERSIONS_LIST=($(get_toolset_value '.java.versions | .[]'))
+JAVA_VERSIONS_LIST=$(get_toolset_value '.java.versions[]')
 JAVA_DEFAULT=$(get_toolset_value '.java.default')
 
 for JAVA_VERSION in "${JAVA_VERSIONS_LIST[@]}"
