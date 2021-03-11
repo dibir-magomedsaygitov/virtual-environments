@@ -16,7 +16,6 @@ createEnvironmentVariable() {
     local JAVA_HOME_PATH=$JAVA_PATH/Contents/Home
     if [[ $JAVA_VERSION == $JAVA_DEFAULT ]]; then
         echo "export JAVA_HOME=${JAVA_HOME_PATH}" | tee -a /etc/environment
-        export PATH="$JAVA_HOME_PATH:$PATH"
     fi
 
     echo "export JAVA_HOME_${JAVA_VERSION}_X64=${JAVA_HOME_PATH}" | tee -a /etc/environment
@@ -45,10 +44,6 @@ installJavaFromAdoptOpenJDK() {
     fi
 
     createEnvironmentVariable $JAVA_VERSION $javaToolcacheVersionArchPath
-
-    # Create a symlink to '/Library/Java/JavaVirtualMachines'
-    # so '/usr/libexec/java_home' will be able to find Java
-    sudo ln -sf $javaToolcacheVersionArchPath "/Library/Java/JavaVirtualMachines/adoptopenjdk-${JAVA_VERSION}.jdk"
 }
 
 JAVA_VERSIONS_LIST=$(get_toolset_value '.java.versions[]')
