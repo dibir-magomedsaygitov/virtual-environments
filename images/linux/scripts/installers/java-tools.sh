@@ -9,30 +9,46 @@ source $HELPER_SCRIPTS/etc-environment.sh
 
 JAVA_TOOLCACHE_PATH="$AGENT_TOOLSDIRECTORY/Java_Adoptium_jdk"
 
+createEnvironmentVariable() {
+    local JAVA_VERSION=$1
+    local JAVA_PATH=$2
+
+    local JAVA_HOME_PATH=$JAVA_PATH/Contents/Home
+    if [[ $JAVA_VERSION == $JAVA_DEFAULT ]]; then
+        echo "export JAVA_HOME=${JAVA_HOME_PATH}" | tee -a /etc/environment
+        export PATH="$JAVA_HOME_PATH:$PATH"
+    fi
+
+    echo "export JAVA_HOME_${JAVA_VERSION}_X64=${JAVA_HOME_PATH}" | tee -a /etc/environment
+}
+
 installJavaFromAdoptOpenJDK() {
     local JAVA_VERSION=$1
 
-    javaRelease=$(curl -s "https://api.adoptopenjdk.net/v3/assets/latest/$JAVA_VERSION/hotspot")
-    archivePath=$(echo $javaRelease | jq -r '[.[] | select(.binary.os=="mac") | .binary.package.link][0]')
-    fullVersion=$(echo $javaRelease | jq -r '[.[] | select(.binary.os=="mac") | .version.openjdk_version][0]')
+    javaRelease=$(curl -s "https://api.adoptopenjdk.net/v3/assets/latest/${JAVA_VERSION}/hotspot" \
+                | jq -r '[.[] | select(.binary.os=="linux")][0]')
+    archivePath=$(echo $javaRelease | jq -r '.binary.package.link')
+    fullVersion=$(echo $javaRelease | jq -r '.version.semver')
+
     javaToolcacheVersionPath="$JAVA_TOOLCACHE_PATH/$fullVersion"
     javaToolcacheVersionArchPath="$javaToolcacheVersionPath/x64"
 
     echo "Downloading tar archive $archivePath"
     download_with_retries $archivePath "/tmp" "OpenJDK$JAVA_VERSION.tar.gz"
-
-    mkdir "/tmp/jdk-$fullVersion" && tar -xzf "/tmp/OpenJDK$JAVA_VERSION.tar.gz" -C "/tmp/jdk-$fullVersion"
     mkdir -p "$javaToolcacheVersionArchPath"
-    mv "/tmp/jdk-$fullVersion/*/*" "$javaToolcacheVersionArchPath"
+    tar -xzf "/tmp/OpenJDK${JAVA_VERSION}.tar.gz" -C $javaToolcacheVersionArchPath --strip-components=1
 
-    local JAVA_HOME_PATH="$javaToolcacheVersionArchPath/Contents/Home"
-
-    if [[ $JAVA_VERSION == "8" ]]; then
-        echo "export JAVA_HOME=${JAVA_HOME_PATH}" | tee -a /etc/environment
-        export PATH="$JAVA_HOME_PATH:$PATH"
-    else
-        echo "export JAVA_HOME_${JAVA_VERSION}_X64=${JAVA_HOME_PATH}" | tee -a /etc/environment
+    COMPLETE_FILE_PATH="$javaToolcacheVersionArchPath/x64.complete"
+    if [ ! -f $COMPLETE_FILE_PATH ]; then
+        echo "Create complete file"
+        touch $COMPLETE_FILE_PATH
     fi
+
+    createEnvironmentVariable $JAVA_VERSION $javaToolcacheVersionArchPath
+
+    # Create a symlink to '/Library/Java/JavaVirtualMachines'
+    # so '/usr/libexec/java_home' will be able to find Java
+    sudo ln -sf $javaToolcacheVersionArchPath "/Library/Java/JavaVirtualMachines/adoptopenjdk-${JAVA_VERSION}.jdk"
 }
 
 JAVA_VERSIONS_LIST=$(get_toolset_value '.java.versions[]')
@@ -42,8 +58,6 @@ for JAVA_VERSION in "${JAVA_VERSIONS_LIST[@]}"
 do
     installJavaFromAdoptOpenJDK $JAVA_VERSION
 done
-
-installJavaFromAdoptOpenJDK $JAVA_DEFAULT
 
 # Install Ant
 apt-fast install -y --no-install-recommends ant ant-optional
