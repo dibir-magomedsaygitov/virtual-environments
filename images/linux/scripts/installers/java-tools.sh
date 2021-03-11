@@ -83,3 +83,5 @@ ln -s /usr/share/gradle-"${gradleVersion}"/bin/gradle /usr/bin/gradle
 echo "GRADLE_HOME=/usr/share/gradle" | tee -a /etc/environment
 
 reloadEtcEnvironment
+
+invoke_tests "Java"
