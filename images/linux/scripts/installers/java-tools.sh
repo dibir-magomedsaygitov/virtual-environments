@@ -15,17 +15,17 @@ createEnvironmentVariable() {
 
     local JAVA_HOME_PATH=$JAVA_PATH/Contents/Home
     if [[ $JAVA_VERSION == $JAVA_DEFAULT ]]; then
-        echo "export JAVA_HOME=${JAVA_HOME_PATH}" | tee -a /etc/environment
+        echo "JAVA_HOME=${JAVA_HOME_PATH}" | tee -a /etc/environment
     fi
 
-    echo "export JAVA_HOME_${JAVA_VERSION}_X64=${JAVA_HOME_PATH}" | tee -a /etc/environment
+    echo "JAVA_HOME_${JAVA_VERSION}_X64=${JAVA_HOME_PATH}" | tee -a /etc/environment
 }
 
 installJavaFromAdoptOpenJDK() {
     local JAVA_VERSION=$1
 
     javaRelease=$(curl -s "https://api.adoptopenjdk.net/v3/assets/latest/${JAVA_VERSION}/hotspot" \
-                | jq -r '[.[] | select(.binary.os=="linux")][0]')
+                | jq -r '[.[] | select(.binary.os=="linux" and .binary.image_type=="jdk" and .binary.architecture=="x64")][0]')
     archivePath=$(echo $javaRelease | jq -r '.binary.package.link')
     fullVersion=$(echo $javaRelease | jq -r '.version.semver')
 
@@ -44,6 +44,9 @@ installJavaFromAdoptOpenJDK() {
     fi
 
     createEnvironmentVariable $JAVA_VERSION $javaToolcacheVersionArchPath
+
+    # Create a symlink to '/usr/lib/jvm' so '/usr/libexec/java_home' will be able to find Java
+    ln -sf $javaToolcacheVersionArchPath /usr/lib/jvm/adoptopenjdk-${JAVA_VERSION}.jdk
 }
 
 JAVA_VERSIONS_LIST=$(get_toolset_value '.java.versions[]')
